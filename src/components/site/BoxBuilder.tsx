@@ -16,10 +16,10 @@ const steps = ["Формат бокса", "Вкусы", "Фасовка и уп�
 
 export function BoxBuilder() {
   const [step, setStep] = useState(0);
-  const [categoryId, setCategoryId] = useState(boxCategories[1].id);
+  const [categoryId, setCategoryId] = useState(boxCategories[1]!.id);
   const [tab, setTab] = useState<(typeof fillingCategories)[number]>("Все");
   const [selected, setSelected] = useState<Selection[]>([]);
-  const [packagingId, setPackagingId] = useState(packagings[0].id);
+  const [packagingId, setPackagingId] = useState(packagings[0]!.id);
   const [note, setNote] = useState("");
   const [added, setAdded] = useState(false);
 
