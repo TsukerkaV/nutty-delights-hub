@@ -1,24 +1,64 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Header } from "@/components/site/Header";
+import { Hero } from "@/components/site/Hero";
+import { ProductCard, type Product } from "@/components/site/ProductCard";
+import { BentoWhy } from "@/components/site/BentoWhy";
+import { Reviews } from "@/components/site/Reviews";
+import { Footer } from "@/components/site/Footer";
+import almond from "@/assets/p-almond.jpg";
+import cashew from "@/assets/p-cashew.jpg";
+import pistachio from "@/assets/p-pistachio.jpg";
+import mango from "@/assets/p-mango.jpg";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const title = "Dubai — орехи и сухофрукты с доставкой в Минске и Ереване";
+const description =
+  "Премиальные орехи, сухофрукты, цукаты и подарочные боксы Dubai. Экспресс-доставка от 30 минут, самовывоз из 12 магазинов, кэшбэк и подписка.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+const products: Product[] = [
+  { id: "1", name: "Миндаль в жареной скорлупе", image: almond, cashback: 5, pricePer100: 10.34 },
+  { id: "2", name: "Кешью жареный без соли", image: cashew, cashback: 7, pricePer100: 12.6 },
+  { id: "3", name: "Фисташка солёная ж/с", image: pistachio, cashback: 5, pricePer100: 15.34 },
+  { id: "4", name: "Манго сушёное без сахара", image: mango, cashback: 10, pricePer100: 6.96 },
+];
+
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <Header />
+      <main>
+        <Hero />
+
+        <section className="py-16">
+          <div className="mx-auto max-w-7xl px-4">
+            <h2 className="text-2xl font-extrabold tracking-tight md:text-3xl">
+              Рекомендуемые товары
+            </h2>
+            <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+              {products.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <BentoWhy />
+        <Reviews />
+      </main>
+      <Footer />
     </div>
   );
 }
