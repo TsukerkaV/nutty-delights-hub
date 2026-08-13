@@ -1,4 +1,5 @@
 import { Leaf, Mic } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import hero from "@/assets/hero-nuts.jpg";
 
 export function Hero() {
@@ -25,9 +26,12 @@ export function Hero() {
             Доставка из ближайшего магазина в Минске и Ереване от 30 минут.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <button className="rounded-[10px] bg-primary px-7 py-4 text-base font-bold text-primary-foreground shadow-hover transition-transform hover:scale-[1.02] hover:bg-primary-dark">
+            <Link
+              to="/constructor"
+              className="rounded-[10px] bg-primary px-7 py-4 text-center text-base font-bold text-primary-foreground shadow-hover transition-transform hover:scale-[1.02] hover:bg-primary-dark"
+            >
               Собрать свой бокс
-            </button>
+            </Link>
             <button className="flex items-center justify-center gap-2 rounded-[10px] border-2 border-primary px-7 py-4 text-base font-bold text-primary-foreground/95 backdrop-blur transition-colors hover:bg-primary/15">
               <Mic className="size-5 text-primary" />
               Запустить AI-Сомелье
