@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Check, Minus, Plus, ShoppingCart, Sparkles, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, ShoppingCart, Sparkles, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   boxCategories,
@@ -364,7 +364,7 @@ export function BoxBuilder() {
                 aria-label="Назад"
                 className="rounded-[10px] border border-border px-3 py-3 text-muted-foreground transition-colors hover:text-foreground disabled:opacity-40"
               >
-                <Minus className="size-4" />
+                <ArrowLeft className="size-4" />
               </button>
               {step < 2 ? (
                 <button
@@ -372,7 +372,7 @@ export function BoxBuilder() {
                   className="flex flex-1 items-center justify-center gap-2 rounded-[10px] bg-primary py-3 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary-dark"
                 >
                   Далее
-                  <Plus className="size-4" />
+                  <ArrowRight className="size-4" />
                 </button>
               ) : (
                 <button
