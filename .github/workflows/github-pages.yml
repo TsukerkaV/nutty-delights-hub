@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,7 +29,6 @@ jobs:
         env:
           GITHUB_PAGES: "true"
       - name: Prepare Pages folder
-        id: prep
         run: |
           if [ -d dist/client ]; then
             PUB=dist/client
@@ -47,19 +46,11 @@ jobs:
           elif [ -f "$PUB/index.html" ]; then
             cp "$PUB/index.html" "$PUB/404.html"
           fi
-          echo "publish_dir=$PUB" >> "$GITHUB_OUTPUT"
-          echo "Publishing from $PUB"
+          echo "PUB=$PUB" >> "$GITHUB_ENV"
           ls -la "$PUB" | head
-      - uses: actions/upload-pages-artifact@v3
+      - name: Publish gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: ${{ steps.prep.outputs.publish_dir }}
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ env.PUB }}
+          force_orphan: true
