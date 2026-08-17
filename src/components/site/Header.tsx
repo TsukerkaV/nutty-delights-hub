@@ -17,6 +17,7 @@ import { useCart } from "@/lib/cart";
 import { parseAudience } from "@/lib/audience";
 import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
+import { publicUrl } from "@/lib/public-url";
 
 const categories: { name: string; sub: string[]; hits: string[] }[] = [
   {
@@ -97,7 +98,7 @@ export function Header() {
             search={audience === "b2b" ? { audience: "b2b" } : {}}
             className="shrink-0"
           >
-            <img src="/dubai-logo.png" alt="Dubai — орехи и сухофрукты" className="h-14 w-auto" />
+            <img src={publicUrl("dubai-logo.png")} alt="Dubai — орехи и сухофрукты" className="h-14 w-auto" />
           </Link>
 
           <div className="order-3 col-span-2 lg:order-none lg:col-span-1">

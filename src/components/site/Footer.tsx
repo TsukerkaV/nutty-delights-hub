@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ChevronDown, Clock, Mail, Phone } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
+import { publicUrl } from "@/lib/public-url";
 
 type FooterLink =
   | { label: string; href: string }
@@ -95,7 +96,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12">
         <div className="grid gap-8 md:grid-cols-4">
           <div>
-            <img src="/dubai_footer.png" alt="Dubai" loading="lazy" className="h-14 w-auto" />
+            <img src={publicUrl("dubai_footer.png")} alt="Dubai" loading="lazy" className="h-14 w-auto" />
             <ul className="mt-6 space-y-3 text-sm">
               <li className="flex items-center gap-2">
                 <Phone className="size-4 shrink-0 text-primary" />

@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Lock } from "lucide-react";
 import { type CityId } from "@/data/stores";
 import { cn } from "@/lib/utils";
+import { publicUrl } from "@/lib/public-url";
 
 type CheckoutUi = {
   city: CityId;
@@ -28,7 +29,7 @@ export function CheckoutShell({ children }: { children: ReactNode }) {
         <header className="border-b border-border">
           <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
             <Link to="/" className="shrink-0">
-              <img src="/dubai-logo.png" alt="Dubai" className="h-10 w-auto" />
+              <img src={publicUrl("dubai-logo.png")} alt="Dubai" className="h-10 w-auto" />
             </Link>
             <p className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
               <Lock className="size-3.5 text-primary" />

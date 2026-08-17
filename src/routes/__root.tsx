@@ -16,6 +16,7 @@ import { AiPrefsProvider } from "@/lib/ai-prefs";
 import { AuthProvider } from "@/lib/auth";
 import { OrgModalProvider } from "@/lib/org-modal";
 import { AuthModal } from "@/components/auth/AuthModal";
+import { publicUrl } from "@/lib/public-url";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -103,7 +104,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap",
       },
-      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "icon", href: publicUrl("favicon.png"), type: "image/png" },
     ],
   }),
 

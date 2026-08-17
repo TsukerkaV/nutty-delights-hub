@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { LOYALTY_MEMBER_ID, loyaltyWallet } from "@/data/loyalty";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/lib/auth";
+import { publicUrl } from "@/lib/public-url";
 
 function tokenForMinute(now: number) {
   const minute = Math.floor(now / 60_000);
@@ -44,7 +45,7 @@ export function LoyaltyCard() {
 
       <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-charcoal via-[#2a2a2e] to-charcoal p-6 text-white shadow-hover">
         <div className="flex items-start justify-between gap-4">
-          <img src="/dubai_footer.png" alt="Dubai Club" className="h-10 w-auto" />
+          <img src={publicUrl("dubai_footer.png")} alt="Dubai Club" className="h-10 w-auto" />
           <span className="rounded-full bg-primary px-2.5 py-1 text-[11px] font-bold">GOLD</span>
         </div>
         <p className="mt-8 text-xs uppercase tracking-wider text-white/50">Виртуальная карта</p>
