@@ -1,8 +1,11 @@
 import { Leaf, Mic } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import hero from "@/assets/hero-nuts.jpg";
+import { useVoiceUi } from "@/components/voice/voice-ui-context";
 
 export function Hero() {
+  const { openListening } = useVoiceUi();
+
   return (
     <section className="relative isolate overflow-hidden">
       <img
@@ -32,7 +35,11 @@ export function Hero() {
             >
               Собрать свой бокс
             </Link>
-            <button className="flex items-center justify-center gap-2 rounded-[10px] border-2 border-primary px-7 py-4 text-base font-bold text-primary-foreground/95 backdrop-blur transition-colors hover:bg-primary/15">
+            <button
+              type="button"
+              onClick={() => openListening("sommelier")}
+              className="flex items-center justify-center gap-2 rounded-[10px] border-2 border-primary px-7 py-4 text-base font-bold text-primary-foreground/95 backdrop-blur transition-colors hover:bg-primary/15"
+            >
               <Mic className="size-5 text-primary" />
               Запустить AI-Сомелье
             </button>

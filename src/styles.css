@@ -177,3 +177,20 @@
   background: var(--gradient-hero);
 }
 
+@keyframes checkout-shine {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+.checkout-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.35), transparent);
+  animation: checkout-shine 2.4s ease-in-out infinite;
+}
+

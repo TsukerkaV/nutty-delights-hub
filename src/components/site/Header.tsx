@@ -7,11 +7,16 @@ import {
   Search,
   ShoppingCart,
   Sparkles,
+  User,
 } from "lucide-react";
-import logo from "@/assets/dubai-logo.png.asset.json";
+import { Link, useSearch } from "@tanstack/react-router";
+import { useVoiceUi } from "@/components/voice/voice-ui-context";
+import { AudienceToggle } from "@/components/b2b/AudienceToggle";
+import { UserAvatar } from "@/components/auth/UserAvatar";
+import { useCart } from "@/lib/cart";
+import { parseAudience } from "@/lib/audience";
+import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
-
-const topLinks = ["B2B / Опт", "О компании", "Доставка и оплата", "Адреса магазинов"];
 
 const categories: { name: string; sub: string[]; hits: string[] }[] = [
   {
@@ -44,6 +49,12 @@ const categories: { name: string; sub: string[]; hits: string[] }[] = [
 
 export function Header() {
   const [open, setOpen] = useState<string | null>(null);
+  const { openListening } = useVoiceUi();
+  const { total } = useCart();
+  const { user, openAuth } = useAuth();
+  const search = useSearch({ strict: false });
+  const audience = parseAudience(search.audience);
+  const isB2b = audience === "b2b";
 
   return (
     <header className="sticky top-0 z-50">
@@ -59,7 +70,14 @@ export function Header() {
             </span>
           </button>
           <nav className="hidden items-center gap-6 md:flex">
-            {topLinks.map((l) => (
+            <Link
+              to="/"
+              search={{ audience: "b2b" }}
+              className="text-charcoal-foreground/70 transition-colors hover:text-primary"
+            >
+              B2B / Опт
+            </Link>
+            {["О компании", "Доставка и оплата", "Адреса магазинов"].map((l) => (
               <a
                 key={l}
                 href="#"
@@ -74,9 +92,13 @@ export function Header() {
 
       <div className="border-b border-border bg-background">
         <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-8">
-          <a href="/" className="shrink-0">
-            <img src={logo.url} alt="Dubai — орехи и сухофрукты" className="h-10 w-auto" />
-          </a>
+          <Link
+            to="/"
+            search={audience === "b2b" ? { audience: "b2b" } : {}}
+            className="shrink-0"
+          >
+            <img src="/dubai-logo.png" alt="Dubai — орехи и сухофрукты" className="h-14 w-auto" />
+          </Link>
 
           <div className="order-3 col-span-2 lg:order-none lg:col-span-1">
             <div className="group flex items-center gap-2 rounded-xl border border-border bg-secondary px-4 py-2.5 transition-colors focus-within:border-primary focus-within:bg-background focus-within:ring-2 focus-within:ring-primary/20">
@@ -86,6 +108,8 @@ export function Header() {
                 placeholder='Найти кешью или сказать «Собери сет к вину»...'
               />
               <button
+                type="button"
+                onClick={() => openListening("search")}
                 aria-label="Голосовой поиск Dubai AI"
                 className="flex shrink-0 items-center gap-1.5 rounded-lg bg-primary/10 px-2.5 py-1.5 text-xs font-semibold text-primary-dark transition-colors hover:bg-primary/20"
               >
@@ -102,18 +126,51 @@ export function Header() {
                 3
               </span>
             </button>
-            <button className="hidden items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-sm font-semibold transition-colors hover:bg-accent md:flex">
-              <Sparkles className="size-4 text-primary" />
-              450 <span className="font-normal text-muted-foreground">бонусов</span>
-            </button>
-            <button className="flex items-center gap-2 rounded-xl bg-primary px-3.5 py-2.5 text-sm font-semibold text-primary-foreground shadow-card transition-colors hover:bg-primary-dark">
+            {user ? (
+              <>
+                <Link
+                  to="/club"
+                  className="hidden items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-sm font-semibold transition-colors hover:bg-accent md:flex"
+                >
+                  <Sparkles className="size-4 text-primary" />
+                  {user.bonuses}{" "}
+                  <span className="font-normal text-muted-foreground">бонусов</span>
+                </Link>
+                <Link
+                  to="/club"
+                  search={{ tab: "profile" }}
+                  className="flex items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-sm font-semibold transition-colors hover:bg-accent"
+                >
+                  <UserAvatar src={user.avatar} name={user.firstName} className="size-7 text-[11px]" />
+                  <span className="hidden sm:inline">{user.firstName}</span>
+                </Link>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={openAuth}
+                className="flex items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-sm font-semibold transition-colors hover:bg-accent"
+              >
+                <User className="size-4" />
+                <span className="hidden sm:inline">Войти / Регистрация</span>
+                <span className="sm:hidden">Войти</span>
+              </button>
+            )}
+            <Link
+              to="/checkout"
+              className="flex items-center gap-2 rounded-xl bg-primary px-3.5 py-2.5 text-sm font-semibold text-primary-foreground shadow-card transition-colors hover:bg-primary-dark"
+            >
               <ShoppingCart className="size-4" />
-              <span className="hidden sm:inline">54.00 BYN</span>
-            </button>
+              <span className="hidden sm:inline">{total.toFixed(2)} BYN</span>
+            </Link>
           </div>
+        </div>
+        <div className="mx-auto max-w-7xl px-4 pb-3">
+          <AudienceToggle audience={audience} />
         </div>
       </div>
 
+      {!isB2b && (
       <div
         className="relative border-b border-border bg-background"
         onMouseLeave={() => setOpen(null)}
@@ -173,6 +230,7 @@ export function Header() {
           </div>
         )}
       </div>
+      )}
     </header>
   );
 }

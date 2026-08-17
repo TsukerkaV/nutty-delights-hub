@@ -9,6 +9,13 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { Toaster } from "@/components/ui/sonner";
+import { VoiceAssistant } from "@/components/voice/VoiceAssistant";
+import { CartProvider } from "@/lib/cart";
+import { AiPrefsProvider } from "@/lib/ai-prefs";
+import { AuthProvider } from "@/lib/auth";
+import { OrgModalProvider } from "@/lib/org-modal";
+import { AuthModal } from "@/components/auth/AuthModal";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -125,8 +132,19 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <CartProvider>
+        <AiPrefsProvider>
+          <AuthProvider>
+            <OrgModalProvider>
+              <VoiceAssistant>
+                <Outlet />
+                <AuthModal />
+                <Toaster />
+              </VoiceAssistant>
+            </OrgModalProvider>
+          </AuthProvider>
+        </AiPrefsProvider>
+      </CartProvider>
     </QueryClientProvider>
   );
 }

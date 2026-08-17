@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Check, ShoppingCart } from "lucide-react";
+import { useCart } from "@/lib/cart";
 import { cn } from "@/lib/utils";
 
 export type Product = {
@@ -15,10 +16,18 @@ const weights = [100, 250, 500] as const;
 export function ProductCard({ product }: { product: Product }) {
   const [weight, setWeight] = useState<number>(100);
   const [added, setAdded] = useState(false);
+  const { add: addToCart } = useCart();
 
   const price = ((product.pricePer100 * weight) / 100).toFixed(2);
 
   const add = () => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      grams: weight,
+      pricePer100: product.pricePer100,
+      image: product.image,
+    });
     setAdded(true);
     setTimeout(() => setAdded(false), 1600);
   };

@@ -10,11 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ClubRouteImport } from './routes/club'
 import { Route as ConstructorRouteImport } from './routes/constructor'
+import { Route as CheckoutIndexRouteImport } from './routes/checkout.index'
+import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClubRoute = ClubRouteImport.update({
+  id: '/club',
+  path: '/club',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConstructorRoute = ConstructorRouteImport.update({
@@ -22,30 +36,66 @@ const ConstructorRoute = ConstructorRouteImport.update({
   path: '/constructor',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutIndexRoute = CheckoutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CheckoutRoute,
+} as any)
+const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => CheckoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRouteWithChildren
+  '/club': typeof ClubRoute
   '/constructor': typeof ConstructorRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
+  '/checkout/': typeof CheckoutIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/club': typeof ClubRoute
   '/constructor': typeof ConstructorRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
+  '/checkout': typeof CheckoutIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRouteWithChildren
+  '/club': typeof ClubRoute
   '/constructor': typeof ConstructorRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
+  '/checkout/': typeof CheckoutIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/constructor'
+  fullPaths:
+    | '/'
+    | '/checkout'
+    | '/club'
+    | '/constructor'
+    | '/checkout/success'
+    | '/checkout/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/constructor'
-  id: '__root__' | '/' | '/constructor'
+  to: '/' | '/club' | '/constructor' | '/checkout/success' | '/checkout'
+  id:
+    | '__root__'
+    | '/'
+    | '/checkout'
+    | '/club'
+    | '/constructor'
+    | '/checkout/success'
+    | '/checkout/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CheckoutRoute: typeof CheckoutRouteWithChildren
+  ClubRoute: typeof ClubRoute
   ConstructorRoute: typeof ConstructorRoute
 }
 
@@ -58,6 +108,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/club': {
+      id: '/club'
+      path: '/club'
+      fullPath: '/club'
+      preLoaderRoute: typeof ClubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/constructor': {
       id: '/constructor'
       path: '/constructor'
@@ -65,11 +129,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConstructorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout/': {
+      id: '/checkout/'
+      path: '/'
+      fullPath: '/checkout/'
+      preLoaderRoute: typeof CheckoutIndexRouteImport
+      parentRoute: typeof CheckoutRoute
+    }
+    '/checkout/success': {
+      id: '/checkout/success'
+      path: '/success'
+      fullPath: '/checkout/success'
+      preLoaderRoute: typeof CheckoutSuccessRouteImport
+      parentRoute: typeof CheckoutRoute
+    }
   }
 }
 
+interface CheckoutRouteChildren {
+  CheckoutSuccessRoute: typeof CheckoutSuccessRoute
+  CheckoutIndexRoute: typeof CheckoutIndexRoute
+}
+
+const CheckoutRouteChildren: CheckoutRouteChildren = {
+  CheckoutSuccessRoute: CheckoutSuccessRoute,
+  CheckoutIndexRoute: CheckoutIndexRoute,
+}
+
+const CheckoutRouteWithChildren = CheckoutRoute._addFileChildren(
+  CheckoutRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CheckoutRoute: CheckoutRouteWithChildren,
+  ClubRoute: ClubRoute,
   ConstructorRoute: ConstructorRoute,
 }
 export const routeTree = rootRouteImport

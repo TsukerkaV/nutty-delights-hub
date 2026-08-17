@@ -5,6 +5,8 @@ import { ProductCard, type Product } from "@/components/site/ProductCard";
 import { BentoWhy } from "@/components/site/BentoWhy";
 import { Reviews } from "@/components/site/Reviews";
 import { Footer } from "@/components/site/Footer";
+import { B2bHome } from "@/components/b2b/B2bHome";
+import { parseAudience } from "@/lib/audience";
 import almond from "@/assets/p-almond.jpg";
 import cashew from "@/assets/p-cashew.jpg";
 import pistachio from "@/assets/p-pistachio.jpg";
@@ -15,6 +17,9 @@ const description =
   "Премиальные орехи, сухофрукты, цукаты и подарочные боксы Dubai. Экспресс-доставка от 30 минут, самовывоз из 12 магазинов, кэшбэк и подписка.";
 
 export const Route = createFileRoute("/")({
+  validateSearch: (search: Record<string, unknown>): { audience?: "b2b" } => {
+    return parseAudience(search["audience"]) === "b2b" ? { audience: "b2b" } : {};
+  },
   head: () => ({
     meta: [
       { title },
@@ -36,27 +41,36 @@ const products: Product[] = [
 ];
 
 function Index() {
+  const search = Route.useSearch();
+  const isB2b = search.audience === "b2b";
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <main>
-        <Hero />
+        {isB2b ? (
+          <B2bHome />
+        ) : (
+          <>
+            <Hero />
 
-        <section className="py-16">
-          <div className="mx-auto max-w-7xl px-4">
-            <h2 className="text-2xl font-extrabold tracking-tight md:text-3xl">
-              Рекомендуемые товары
-            </h2>
-            <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-              {products.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
-          </div>
-        </section>
+            <section className="py-16">
+              <div className="mx-auto max-w-7xl px-4">
+                <h2 className="text-2xl font-extrabold tracking-tight md:text-3xl">
+                  Рекомендуемые товары
+                </h2>
+                <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+                  {products.map((p) => (
+                    <ProductCard key={p.id} product={p} />
+                  ))}
+                </div>
+              </div>
+            </section>
 
-        <BentoWhy />
-        <Reviews />
+            <BentoWhy />
+            <Reviews />
+          </>
+        )}
       </main>
       <Footer />
     </div>
